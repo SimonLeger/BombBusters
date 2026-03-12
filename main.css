@@ -110,5 +110,42 @@ footer {
 }
 
 /* ----------------------------------------------------------------------------------------------*/
-/* Login | Sign up */
+/* Main Pages Shared */
 /* ----------------------------------------------------------------------------------------------*/
+
+.content {
+    background-color: rgb(212, 212, 212);
+    text-align: center;
+    padding: 2em;
+    max-width: 1800px;
+    margin: auto;
+    border-radius: 3em;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1em;
+    background-color: rgb(51, 51, 51);
+    width: 60vw;
+    margin: auto;
+    border-radius: 5em;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 5vw;
+    padding: 0;
+}
+
+nav ul li a{
+    text-decoration: none;
+    color: #FF9D00;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+nav ul li a:hover{
+    color: #8000BC;
+}
