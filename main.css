@@ -1,23 +1,114 @@
-body {
+/* ----------------------------------------------------------------------------------------------*/
+/* Main */
+/* ----------------------------------------------------------------------------------------------*/
 
+body {
+    background-image: url('images/scales.jpg');
+    background-repeat: repeat;
+    position: relative;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    
+    color: #FF9D00;
+    font-size: 3em;
 }
 
 header {
-
+    text-align: center;
 }
 
+.logo {
+    width: 50vw;
+    height: auto;
+}
+
+/*
 nav {
     
 }
+*/
 
 main {
-    
+    width: 75vw;
+    margin: auto;
+    padding: 20px;
+    position: relative;
 }
 
 footer {
-    
+    padding: 20px;
+    position: fixed;
+    bottom: 10px;
+    color: #FF9D00;
+    background-color: black;
+    border-radius: 5em;
+    font-size: 1em;
 }
+
+/* ----------------------------------------------------------------------------------------------*/
+/* Login | Sign up */
+/* ----------------------------------------------------------------------------------------------*/
+
+.forms {
+    background-color: rgba(151, 151, 151, 0.89);
+    text-align: center;
+    padding: 2em;
+    max-width: 1200px;
+    margin: auto;
+    border-radius: 3em;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin: 1.5em 0;
+}
+
+.form-input {
+    width: 80%;
+    margin: auto;
+    padding: 1em;
+    border-radius: 1em;
+    border: none;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+.login {
+    width: 10vw;
+    margin: auto;
+    padding: 1em;
+    border-radius: 1em;
+    border: none;
+    font-size: 1.5em;
+    text-align: center;
+    background-color: #8000BC;
+    border: 4px solid #8000BC;
+    color: #FF9D00;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login:hover {
+    background: #8000BC;
+    background: linear-gradient(180deg,rgba(128, 0, 188, 1) 0%, rgba(112, 0, 163, 1) 50%);
+    color: #FF9D00;
+    border: 4px solid #FF9D00;
+}
+
+.quicklink {
+    color: black;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.quicklink:hover {
+    color: #8000BC;
+}
+
+.quicklink:active {
+    color: #FF9D00;
+}
+
+/* ----------------------------------------------------------------------------------------------*/
+/* Login | Sign up */
+/* ----------------------------------------------------------------------------------------------*/
