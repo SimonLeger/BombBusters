@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="game.css">
     <title>Khygon's BombBusters - Lobby</title>
 </head>
 <body>
@@ -20,12 +21,62 @@
         </ul>
     </nav>
     <main>
-        <div class="content">
-            <h1>Gaming</h1>
+<div class="table">
+ 
+    <div class="tl"></div>
+ 
+    <!-- TOP: Joueur 2 (blue) -->
+    <div class="panel panel-top">
+      <div class="top-cards-row" id="topCards"></div>
+      <div class="top-slots-row"  id="topSlots"></div>
+    </div>
+ 
+    <div class="tr"></div>
+ 
+    <!-- LEFT: Joueur 3 (red) -->
+    <div class="panel panel-left">
+      <div class="left-cards-and-slots">
+        <div class="side-cards-col" id="leftCards"></div>
+        <div class="side-slots-col" id="leftSlots"></div>
+      </div>
+    </div>
+ 
+    <!-- CENTER: plateau + power-ups -->
+    <div class="panel panel-center">
+      <div class="board-label">Plateau</div>
+      <div class="number-row" id="numRow"></div>
+      <div class="powerup-zone" id="powerupZone"></div>
+    </div>
+ 
+    <!-- RIGHT: Joueur 4 (gold) -->
+    <div class="panel panel-right">
+      <div class="right-cards-and-slots">
+        <div class="side-slots-col" id="rightSlots"></div>
+        <div class="side-cards-col" id="rightCards"></div>
+      </div>
+    </div>
+ 
+    <div class="bl"></div>
+ 
+    <!-- BOTTOM: Joueur 1 / Vous (green) -->
+    <div class="panel panel-bottom">
+      <div class="bottom-row">
+        <div class="bottom-slots-and-cards">
+          <div class="bottom-slots-row" id="bottomSlots"></div>
+          <div class="main-cards-row"   id="mainCards"></div>
         </div>
+        <button class="confirm-btn" onclick="confirmPlay()">Confirmer</button>
+      </div>
+    </div>
+ 
+    <div class="br"></div>
+ 
+  </div>
+  <script src="game.js"></script>
+  </div>
     </main>
     <footer>
-        <div>Created by Simon Leger in 2026 while unemployed</div>
+    <!--<div>Created by Simon Leger in 2026 while unemployed</div>-->
     </footer>
 </body>
 </html>

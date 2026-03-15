@@ -149,3 +149,47 @@ nav ul li a{
 nav ul li a:hover{
     color: #8000BC;
 }
+
+/* ----------------------------------------------------------------------------------------------*/
+/* GAME */
+/* ----------------------------------------------------------------------------------------------*/
+
+.content {
+    position: relative;
+}
+
+.zone1 {
+    position: absolute;
+    bottom: 0;
+    width: 800px;
+    height: 200px;
+    background-color: red;
+}
+.zone2 {
+    position: absolute;
+    left: 0;
+    height: 800px;
+    width: 100px;
+    background-color: blue;
+}
+.zone3 {
+    position: absolute;
+    top: 0;
+    width: 800px;
+    height: 100px;
+    background-color: green;
+}
+.zone4 {
+    position: absolute;
+    right: 0;
+    width: 100px;
+    height: 800px;
+    
+    background-color: yellow;
+}
+.zone5 {
+    position: absolute;
+    top: 25%;
+    right: 25%;
+    background-color: purple;
+}
