@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <title>Khygon's BombBusters - Game</title>
+</head>
+<body>
+    <header>
+        <a href="home.html"><img src="../images/logo.png" alt="Khygon's BombBusters Logo" class="logo"></a>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="leaderboard.html">Leaderboard</a></li>
+            <li><a href="lobby.html">Play with friends</a></li>
+            <li><a href="lobby.html">Play with bots</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="index.html">Signout</a></li>
+        </ul>
+    </nav>
+
+    <main class="game-main">
+      <div class="table">
+
+        <div class="tl"></div>
+
+        <!-- TOP: Player 2 -->
+        <div class="panel panel-top">
+          <div class="top-slots-pu-row" id="topSlotspu"></div>
+          <div class="top-cards-row" id="topCards"></div>
+          <div class="top-slots-row"  id="topSlots"></div>
+        </div>
+
+        <div class="tr"></div>
+
+        <!-- LEFT: Player 3 -->
+        <div class="panel panel-left">
+          <div class="left-cards-and-slots">
+            <div class="side-slots-col side-slots-pu-col" id="leftSlotspu"></div>
+            <div class="side-slots-col" id="leftCards"></div>
+            <div class="side-slots-col" id="leftSlots"></div>
+          </div>
+        </div>
+
+        <!-- Game Over overlay — covers the entire .table -->
+        <div class="table-overlay" id="tableOverlay"></div>
+
+        <!-- CENTER: plateau + power-ups + lives + indicator -->
+        <div class="panel panel-center">
+          <div class="center-overlay" id="centerOverlay"></div>
+
+          <div class="board-label" id="boardLabel"></div>
+          <div class="number-row" id="numRow"></div>
+          <div class="powerup-zone-wrapper">
+            <div class="powerup-zone" id="powerupZone"></div>
+            <div class="powerup-action-btns">
+              <button class="pu-btn pu-use-btn"    id="pu-use-btn"    onclick="puUseClicked()"    disabled>USE</button>
+              <button class="pu-btn pu-cancel-btn" id="pu-cancel-btn" onclick="cancelPowerup()"   disabled>CANCEL</button>
+            </div>
+          </div>
+
+          <div class="lives-row" id="livesRow">
+            <span class="heart" id="heart-3">&#10084;</span>
+            <span class="heart" id="heart-2">&#10084;</span>
+            <span class="heart" id="heart-1">&#10084;</span>
+            <span class="heart" id="heart-0">&#10084;</span>
+          </div>
+
+          <div class="turn-status" id="turnStatus"></div>
+
+          <div class="indicator-banner" id="indicatorBanner">
+            Indicate the value of one of your cards — it cannot be a yellow or red card
+          </div>
+        </div>
+
+        <!-- RIGHT: Player 4 -->
+        <div class="panel panel-right">
+          <div class="right-cards-and-slots">
+            <div class="side-slots-col" id="rightSlots"></div>
+            <div class="side-slots-col" id="rightCards"></div>
+            <div class="side-slots-col side-slots-pu-col" id="rightSlotspu"></div>
+          </div>
+        </div>
+
+        <div class="bl"></div>
+
+        <!-- BOTTOM: Player 1 / You -->
+        <div class="panel panel-bottom">
+          <div class="bottom-row">
+            <div class="bottom-slots-and-cards">
+              <div class="bottom-slots-row" id="bottomSlots"></div>
+              <div class="main-cards-row"   id="mainCards"></div>
+              <div class="bottom-slots-pu-row" id="bottomSlotspu"></div>
+            </div>
+            <button class="confirm-btn" onclick="confirmPlay()">Confirm</button>
+          </div>
+        </div>
+
+        <div class="br"></div>
+
+      </div>
+    </main>
+
+    <footer>
+        <div>Created by Simon Leger in 2026 while unemployed</div>
+    </footer>
+
+    <!-- Socket.IO library — uncomment when server is ready -->
+    <!-- <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> -->
+    <script src="../js/socket.js"></script>
+    <script src="../js/game.js"></script>
+</body>
+</html>

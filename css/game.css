@@ -1,0 +1,655 @@
+/*
+  ALL SIZES ARE IN vw UNITS
+  The table is always 100vw wide with a 16:9 aspect ratio.
+  Every card, slot, gap and panel column is expressed as a fraction of vw
+  so the layout is pixel-perfect at 1080p, 1440p, 4K and any zoom level.
+
+  Reference base (1920px wide = 100vw):
+    1px  = 0.052vw
+    10px = 0.521vw
+    38px = 1.979vw   (mini-card width / side-card height)
+    56px = 2.917vw   (mini-card height / side-card width)
+    60px = 3.125vw   (main-card width)
+    88px = 4.583vw   (main-card height)
+   160px = 8.333vw   (side panel column width)
+*/
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.table {
+  width: 100%;
+  background: #5a5a5a;
+  position: relative;  /* contains the game-over overlay */
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 8.333vw 1fr 8.333vw;
+  grid-template-areas:
+    "tl  top    tr"
+    "left center right"
+    "bl  bottom  br";
+  gap: 0.313vw;
+  padding: 0.417vw;
+  border-radius: 0.521vw;
+  aspect-ratio: 16 / 9;
+}
+
+.panel {
+  background: rgba(255,255,255,0.08);
+  border: 0.052vw solid rgba(255,255,255,0.13);
+  border-radius: 0.313vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+/* Corner spacers */
+.tl { grid-area: tl; background: transparent; border: none; }
+.tr { grid-area: tr; background: transparent; border: none; }
+.bl { grid-area: bl; background: transparent; border: none; }
+.br { grid-area: br; background: transparent; border: none; }
+
+/* Panel colors driven by game.js */
+
+/* Card back borders */
+.back-p2 { border-color: rgba(100,140,255,0.55) !important; }
+.back-p3 { border-color: rgba(255,100,100,0.55) !important; }
+.back-p4 { border-color: rgba(255,200, 60,0.55) !important; }
+
+/* Slot accent colours */
+.slot-p1 { border-color: rgba(100,200,120,0.55) !important; }
+.slot-p2 { border-color: rgba(100,140,255,0.55) !important; }
+.slot-p3 { border-color: rgba(255,100,100,0.55) !important; }
+.slot-p4 { border-color: rgba(255,200, 60,0.55) !important; }
+
+/* Placeholder (grey + X) */
+.card-placeholder {
+  position: relative;
+  background: rgba(255,255,255,0.06);
+  border: 0.052vw solid rgba(255,255,255,0.15) !important;
+  flex-shrink: 0;
+  overflow: hidden;
+  cursor: default !important;
+}
+.card-placeholder::before,
+.card-placeholder::after {
+  content: '';
+  position: absolute;
+  background: rgba(255,255,255,0.18);
+  border-radius: 0.052vw;
+  width: 130%;
+  height: 0.078vw;
+  top: 50%;
+  left: -15%;
+}
+.card-placeholder::before { transform: rotate(var(--x-angle)); }
+.card-placeholder::after  { transform: rotate(calc(-1 * var(--x-angle))); }
+
+.mini-card.card-placeholder  { --x-angle: 57deg; }
+.side-card.card-placeholder  { --x-angle: 33deg; }
+.main-card.card-placeholder  { --x-angle: 55deg; }
+.num-card.card-placeholder   { background: white !important; border-color: rgba(0,0,0,0.2) !important; }
+.num-card.card-placeholder::before,
+.num-card.card-placeholder::after { display: none; }
+.num-card.card-placeholder .num-label { color: rgba(0,0,0,0.75); background: transparent; }
+.powerup-card.card-placeholder { --x-angle: 52deg; }
+
+/* TOP panel */
+.panel-top { grid-area: top; flex-direction: column; padding: 0.313vw 0.521vw; gap: 0.26vw; }
+.top-cards-row,
+.top-slots-row { display: flex; gap: 0.156vw; justify-content: center; }
+
+/* LEFT panel — spans rows 1+2 */
+.panel-left { grid-area: left; grid-row: 1/3; flex-direction: row; padding: 0.417vw 0.313vw; gap: 0.208vw; overflow: hidden; align-self: stretch; }
+.left-cards-and-slots { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.417vw; flex: 1; }
+.side-cards-col,
+.side-slots-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.208vw; }
+
+/* Interleaved card+slot column for side panels */
+
+
+/* RIGHT panel — spans rows 1+2 */
+.panel-right { grid-area: right; grid-row: 1/3; flex-direction: row; padding: 0.417vw 0.313vw; gap: 0.208vw; overflow: hidden; align-self: stretch; }
+.right-cards-and-slots { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.417vw; flex: 1; }
+
+/* CENTER panel */
+.panel-center {
+  grid-area: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0.4vw 0.52vw 0.52vw;
+  gap: 0.35vw;
+  background: #4a4a4a;
+  align-items: stretch;
+  border-color: rgba(255,255,255,0.1);
+  position: relative;
+}
+
+.board-label {
+  font-size: 3.8vw;
+  font-weight: 900;
+  color: rgba(255,255,255,0.95);
+  text-align: center;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.2vw 0 1.2vw;   /* extra bottom space before the white cards */
+  flex-shrink: 0;
+}
+
+.number-row { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.208vw; flex-wrap: nowrap; }
+
+.num-card {
+  width: 2.188vw; height: 3.125vw;
+  border-radius: 0.26vw;
+  overflow: hidden; flex-shrink: 0; cursor: pointer;
+  border: 0.104vw solid rgba(0,0,0,0.15);
+  background: white;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.num-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.num-card:hover { transform: translateY(-0.208vw); }
+.num-card.active { background: #4caf50; border-color: #2e7d32; }
+.num-card.selected { outline: 0.104vw solid #6dc87a; transform: translateY(-0.26vw); }
+
+.num-label {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.729vw; font-weight: 700; color: #222;
+  background: transparent;
+  pointer-events: none;
+}
+.num-card.active .num-label { color: white; }
+
+.slot-group { display: flex; flex-direction: column; gap: 0.156vw; flex-shrink: 0; }
+.empty-slot { width: 0.938vw; height: 1.25vw; border-radius: 0.156vw; border: 0.052vw dashed rgba(255,255,255,0.3); flex-shrink: 0; }
+
+/* Power-up zone */
+.powerup-zone {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.78vw;
+  background: rgba(0,0,0,0.2);
+  border: 0.052vw solid rgba(255,255,255,0.08);
+  border-radius: 0.26vw;
+  padding: 0.625vw;
+  height: 9.375vw;
+  flex-shrink: 0;
+}
+.powerup-card {
+  width: 6.25vw; height: 100%;
+  border-radius: 0.313vw;
+  border: 0.104vw solid rgba(180,120,255,0.4);
+  overflow: hidden; cursor: pointer; position: relative;
+  background: rgba(100,60,160,0.18);
+  transition: border-color 0.15s, transform 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.powerup-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.powerup-card .pu-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.187vw; color: rgba(180,120,255,0.4); }
+.powerup-card:not(.card-placeholder):hover { border-color: rgba(200,150,255,0.75); transform: translateY(-0.208vw); }
+.powerup-card.selected { border-color: #b87fff; transform: translateY(-0.313vw); }
+
+/* BOTTOM panel */
+.panel-bottom { grid-area: bottom; grid-column: 1/4; flex-direction: column; padding: 0.417vw 0.729vw 0.521vw; gap: 0.26vw; align-items: center; }
+.bottom-row { display: flex; align-items: center; gap: 0.625vw; width: 100%; justify-content: center; }
+.bottom-slots-and-cards { display: flex; flex-direction: column; align-items: flex-start; gap: 0.208vw; }
+.bottom-slots-row,
+.main-cards-row { display: flex; gap: 0.208vw; }
+
+.confirm-btn {
+  background: #3d9e4a; border: none; border-radius: 0.313vw;
+  color: #fff; font-size: 0.677vw; font-weight: 500;
+  padding: 0.521vw 0.938vw; cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s;
+}
+.confirm-btn:hover  { background: #4db85a; }
+.confirm-btn:active { transform: scale(0.97); }
+
+/* CARD SIZES — all in vw */
+
+/* Top hand: 38×56px → 1.979×2.917vw */
+.mini-card {
+  width: 1.979vw; height: 2.917vw;
+  border-radius: 0.208vw;
+  border: 0.078vw solid rgba(255,255,255,0.25);
+  flex-shrink: 0; cursor: pointer; overflow: hidden;
+  transition: opacity 0.15s;
+  position: relative;
+}
+.mini-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mini-card:not(.card-placeholder):hover { opacity: 0.8; }
+.mini-card.selected { outline: 0.104vw solid #6dc87a; }
+.mini-slot { width: 1.979vw; height: 1.25vw; border-radius: 0.156vw; border: 0.052vw dashed; flex-shrink: 0; }
+
+/* Side hands: landscape 56×38px → 2.917×1.979vw, image rotated 90° inside */
+.side-card {
+  width: 2.917vw; height: 1.979vw;
+  border-radius: 0.208vw;
+  border: 0.078vw solid rgba(255,255,255,0.25);
+  flex-shrink: 0; cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.15s;
+  position: relative;
+}
+.side-card img {
+  position: absolute;
+  width: 1.979vw;
+  height: 2.917vw;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  object-fit: cover;
+}
+.side-card:not(.card-placeholder):hover { opacity: 0.8; }
+.side-card.selected { outline: 0.104vw solid #6dc87a; }
+.side-slot { width: 1.25vw; height: 1.979vw; border-radius: 0.156vw; border: 0.052vw dashed; flex-shrink: 0; }
+
+/* Main hand: 60×88px → 3.125×4.583vw */
+.main-card {
+  width: 3.125vw; height: 4.583vw;
+  border-radius: 0.26vw;
+  border: 0.104vw solid rgba(100,200,120,0.5);
+  flex-shrink: 0; cursor: pointer; overflow: hidden;
+  transition: transform 0.15s, border-color 0.15s;
+  position: relative;
+}
+.main-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.938vw; font-weight: 500; color: rgba(255,255,255,0.95); background: rgba(0,0,0,0.35); }
+.main-card:not(.card-placeholder):hover { transform: translateY(-0.417vw); }
+.main-card.selected { border-color: #6dc87a; transform: translateY(-0.521vw); }
+.main-slot { width: 3.125vw; height: 1.458vw; border-radius: 0.156vw; border: 0.052vw dashed; flex-shrink: 0; }
+
+/* Spent cards — used in a correct guess, no longer playable */
+.main-card.spent {
+  opacity: 0.35;
+  cursor: default;
+  filter: grayscale(60%);
+  border-color: rgba(255,255,255,0.15) !important;
+}
+/* Small X overlay so it's unmistakably blocked */
+.main-card.spent::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom right,
+      transparent calc(50% - 0.5px),
+      rgba(255,80,80,0.55) calc(50% - 0.5px),
+      rgba(255,80,80,0.55) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    ),
+    linear-gradient(
+      to bottom left,
+      transparent calc(50% - 0.5px),
+      rgba(255,80,80,0.55) calc(50% - 0.5px),
+      rgba(255,80,80,0.55) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    );
+  pointer-events: none;
+}
+
+/* Indicator phase banner — absolute, floats under the hearts row */
+.indicator-banner {
+  position: absolute;
+  /* positioned just below the lives-row, which is roughly 2.5vw tall from bottom */
+  bottom: 0.35vw;
+  left: 0.4vw;
+  right: 0.4vw;
+  background: rgba(255, 220, 50, 0.15);
+  border: 0.078vw solid rgba(255, 220, 50, 0.5);
+  border-radius: 0.26vw;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.3vw;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.3vw 0.8vw;
+  letter-spacing: 0.04em;
+  animation: pulse-banner 1.8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes pulse-banner {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* Filled indicator slot — white background, black number */
+.main-slot.indicator-filled {
+  background: white;
+  border: 0.078vw solid rgba(0, 0, 0, 0.25) !important;
+  border-radius: 0.156vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625vw;
+  font-weight: 700;
+  color: #222;
+  cursor: default;
+}
+
+/* Wrong guess indicator on opponent slot — white bg, red number */
+.indicator-wrong {
+  background: white !important;
+  border: 0.078vw solid rgba(200, 0, 0, 0.4) !important;
+  border-radius: 0.156vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55vw;
+  font-weight: 700;
+  color: #c00;
+  cursor: default;
+}
+
+/* Yellow wrong guess — yellow background, no number text */
+.indicator-wrong.indicator-wrong-yellow {
+  background: #f5e642 !important;
+  border-color: rgba(180, 140, 0, 0.5) !important;
+  color: transparent;
+}
+
+/* Plateau between-card slots — yellow (top) and red (bottom) */
+.plateau-slot-yellow,
+.plateau-slot-red {
+  opacity: 0.25;  /* dim when the color isn't in play for that number */
+}
+
+/* Yellow slot — lit up when that number has a yellow card in the game */
+.plateau-slot-yellow.plateau-slot-has-yellow {
+  background: #f5e642;
+  border: 0.052vw solid rgba(180,140,0,0.6) !important;
+  border-radius: 0.156vw;
+  opacity: 1;
+}
+
+/* Red slot — lit up when that number has a red card in the game */
+.plateau-slot-red.plateau-slot-has-red {
+  background: #e05050;
+  border: 0.052vw solid rgba(160,30,30,0.6) !important;
+  border-radius: 0.156vw;
+  opacity: 1;
+}
+
+/* Lives row — absolute, just above the indicator banner */
+.lives-row {
+  /* Remove from absolute — let it sit naturally in the flex column flow */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1vw;
+  z-index: 5;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.heart {
+  font-size: 4vw;
+  line-height: 1;
+  color: #e03030;
+  transition: color 0.3s ease, transform 0.3s ease, -webkit-text-stroke 0.3s ease;
+}
+/* Lost heart — hollow outline, same size, clearly "empty slot" */
+.heart.lost {
+  color: transparent;
+  -webkit-text-stroke: 0.12vw rgba(200, 60, 60, 0.7);
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+/* Center overlay — WRONG and GAME OVER messages */
+/* WRONG overlay — center panel only */
+.center-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 100;
+  border-radius: 0.313vw;
+}
+.center-overlay.show-wrong {
+  pointer-events: none;
+  background: rgba(180, 0, 0, 0.82);
+  animation: flash-wrong 0.15s ease-out;
+}
+.center-overlay .overlay-text {
+  font-size: 2vw;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 1vw rgba(255,80,80,0.8);
+  font-family: sans-serif;
+  padding: 0 1.5vw;
+  line-height: 1.3;
+  text-transform: none;
+}
+@keyframes flash-wrong {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* GAME OVER overlay — covers the entire .table */
+.table-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 0.521vw;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 200;
+}
+.table-overlay.show-gameover {
+  display: flex;
+  pointer-events: all;
+  background: rgba(10, 0, 0, 0.88);
+}
+.table-overlay .overlay-text {
+  font-size: 6vw;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 2vw rgba(255, 60, 60, 0.9), 0 0 4vw rgba(255, 0, 0, 0.4);
+  font-family: sans-serif;
+  text-transform: uppercase;
+}
+
+/* Turn status bar */
+.turn-status {
+  font-size: 0.85vw;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.35vw 0.8vw;
+  border-radius: 0.26vw;
+  border: 0.078vw solid rgba(0,0,0,0.35);
+  background: rgba(60, 60, 60, 0.82);   /* dark grey — player color stands out clearly */
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Your turn — dark green tint + green inward glow */
+.turn-status--yours {
+  background: rgba(20, 60, 25, 0.88);
+  color: rgba(255,255,255,0.95);
+}
+
+/* Waiting — dark neutral */
+.turn-status--waiting {
+  background: rgba(50, 50, 50, 0.88);
+  color: rgba(255,255,255,0.85);
+}
+
+/* Power-up indicator slots — same size as value slots, different dash color */
+/* Top hand — power-up row above cards, same width as mini-card */
+/*
+  PU SLOT ALIGNMENT STRATEGY
+  ---------------------------
+  Each pu-slot row uses CSS Grid mirroring the card row layout.
+  Card row:  grid of 14 columns (card width) with same gap.
+  Slot row:  grid of 13 columns (slot width) + same gap, BUT
+             offset by half a card width so each slot sits
+             exactly centered between two adjacent cards.
+
+  We achieve this by making the slot grid have:
+    - same outer width as the card row
+    - first/last padding = half card width + half gap
+    - column size matches the remaining space between two card centres
+*/
+
+/* TOP — mini-card: 1.979vw wide, gap: 0.156vw
+   slot column = 1.979vw + 0.156vw = 2.135vw, minus slot width
+   padding each side = (1.979 + 0.156) / 2 = 1.068vw              */
+.top-slots-pu-row {
+  display: grid;
+  grid-template-columns: repeat(13, 1.979vw);
+  gap: 0.156vw;
+  justify-content: center;
+  padding-left: calc(1.979vw / 2);
+  padding-right: calc(1.979vw / 2);
+}
+.mini-slot-pu {
+  height: 1.25vw;
+  border-radius: 0.156vw;
+  border: 0.052vw dashed rgba(180,120,255,0.45);
+}
+
+/* SIDE — side-card: 2.917vw wide (landscape), gap: 0.208vw
+   pu slots are vertical — same logic but transposed             */
+/* Side pu slots — same column structure as value slots but offset by half a card.
+   side-card: 1.979vw tall, gap: 0.208vw
+   Half card+gap = (1.979 + 0.208) / 2 = 1.0935vw ≈ 1.094vw
+   The column uses the SAME gap as the card column (0.208vw) but starts
+   half a card lower, so each slot sits exactly between two adjacent cards. */
+.side-slot-pu {
+  width: 1.25vw;
+  height: 1.979vw;
+  border-radius: 0.156vw;
+  border: 0.052vw dashed rgba(180,120,255,0.45);
+  flex-shrink: 0;
+}
+.side-slots-pu-col {
+  gap: 0.208vw !important;
+  justify-content: flex-start !important;
+  padding-top: 1.094vw !important;
+  align-self: stretch !important;
+}
+
+/* BOTTOM — main-card: 3.125vw wide, gap: 0.208vw              */
+.bottom-slots-pu-row {
+  display: grid;
+  grid-template-columns: repeat(13, 3.125vw);
+  gap: 0.208vw;
+  padding-left: calc(3.125vw / 2);
+  padding-right: calc(3.125vw / 2);
+}
+.main-slot-pu {
+  height: 1.458vw;
+  border-radius: 0.156vw;
+  border: 0.052vw dashed rgba(180,120,255,0.45);
+}
+
+/* Powerup card states */
+.powerup-locked {
+  opacity: 0.45;
+  cursor: default;
+  filter: grayscale(70%);
+  border-color: rgba(255,255,255,0.15) !important;
+}
+.powerup-locked::after {
+  content: '🔒';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5vw;
+  background: rgba(0,0,0,0.35);
+  pointer-events: none;
+}
+.powerup-unlocked {
+  border-color: rgba(180,120,255,0.8) !important;
+  cursor: pointer;
+  box-shadow: 0 0 0.4vw 0.1vw rgba(180,120,255,0.4);
+}
+.powerup-unlocked:hover {
+  border-color: rgba(220,170,255,1) !important;
+  transform: translateY(-0.3vw);
+}
+.powerup-used {
+  opacity: 0.25;
+  cursor: default;
+  filter: grayscale(80%);
+  border-color: rgba(255,255,255,0.1) !important;
+}
+.powerup-used::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2vw;
+  color: rgba(100,200,120,0.7);
+  background: rgba(0,0,0,0.3);
+  pointer-events: none;
+  font-weight: 900;
+}
+
+/* Powerup zone + buttons wrapper */
+.powerup-zone-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4vw;
+  flex-shrink: 0;
+  align-self: stretch;  /* fill the full center panel width */
+}
+
+/* USE / CANCEL button column */
+.powerup-action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vw;
+  flex-shrink: 0;
+}
+
+.pu-btn {
+  border: none;
+  border-radius: 0.26vw;
+  font-size: 0.65vw;
+  font-weight: 700;
+  padding: 0.35vw 0.7vw;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: opacity 0.15s, transform 0.1s;
+  color: white;
+}
+.pu-btn:active:not(:disabled) { transform: scale(0.96); }
+.pu-btn:disabled { cursor: default; }
+
+.pu-use-btn    { background: #2060cc; }
+.pu-use-btn:not(:disabled):hover    { background: #3070dd; }
+
+.pu-cancel-btn { background: #d06010; }
+.pu-cancel-btn:not(:disabled):hover { background: #e07020; }
+
+/* Armed powerup — glowing highlight */
+.powerup-armed {
+  border-color: #ffdd44 !important;
+  box-shadow: 0 0 0.5vw 0.15vw rgba(255,220,50,0.6) !important;
+  cursor: pointer;
+}
+.powerup-armed:hover { transform: translateY(-0.2vw); }
